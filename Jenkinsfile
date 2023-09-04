@@ -14,12 +14,12 @@ node {
           stage('Build docker') {
                  dockerImage = docker.build("keycloak-springboot-microservice:${env.BUILD_NUMBER}")
           }
-
-          stage('Deploy docker'){
-                  echo "Docker Image Tag Name: ${dockerImageTag}"
-                  sh "docker stop keycloak-springboot-microservice || true && docker rm keycloak-springboot-microservice || true"
-                  sh "docker run --name keycloak-springboot-microservice -d -p 9797:8080 --mount type=bind,source=/Files-Upload,target=/Files-Upload keycloak-springboot-microservice:${env.BUILD_NUMBER}"
-          }
+          stage('Deploy docker') {
+            echo "Docker Image Tag Name: ${dockerImageTag}"
+            sh 'docker stop keycloak-springboot-microservice || true && docker rm keycloak-springboot-microservice || true'
+            sh 'docker images | grep "keycloak-springboot-microservice" | awk \'{print $1":"$2}\' | xargs docker rmi'
+            sh "docker run --name keycloak-springboot-microservice -d -p 9797:8080 --mount type=bind,source=/Files-Upload,target=/Files-Upload keycloak-springboot-microservice:${env.BUILD_NUMBER}"
+        }
     }catch(e){
 //         currentBuild.result = "FAILED"
         throw e
