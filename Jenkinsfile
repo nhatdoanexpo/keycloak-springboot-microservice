@@ -27,6 +27,7 @@ node {
              sh """
              for image in \$all_images; do
                  if [[ "\$image" != "keycloak-springboot-microservice:${env.BUILD_NUMBER}" ]]; then
+                     echo "Deleting image: \$image"
                      docker rmi \$image || true
                  fi
              done
