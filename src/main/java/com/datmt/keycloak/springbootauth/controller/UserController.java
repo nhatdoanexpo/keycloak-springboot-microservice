@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
-@CrossOrigin(origins = "https://phanmemvet.vn")
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
