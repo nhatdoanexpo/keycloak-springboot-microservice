@@ -18,20 +18,23 @@ node {
              echo "Docker Image Tag Name: ${dockerImageTag}"
              sh 'docker stop keycloak-springboot-microservice || true && docker rm keycloak-springboot-microservice || true'
 
-             // Lấy danh sách tất cả các hình ảnh có tên "keycloak-springboot-microservice"
-             sh """
-             all_images=\$(docker images | grep "keycloak-springboot-microservice" | awk '{print \$1":"\$2}')
-             """
+              // Lấy danh sách tất cả các hình ảnh có tên "keycloak-springboot-microservice"
+                def all_images = sh(script: 'docker images | grep "keycloak-springboot-microservice" | awk \'{print $1":"$2}\'', returnStdout: true).trim().split('\n')
 
-             // Xóa các hình ảnh cũ trừ hình ảnh mới
-             sh """
-             for image in \$all_images; do
-                 if [[ "\$image" != "keycloak-springboot-microservice:${env.BUILD_NUMBER}" ]]; then
-                     echo "Deleting image: \$image"
-                     docker rmi \$image || true
-                 fi
-             done
-             """
+                // In log để kiểm tra danh sách các hình ảnh
+                echo "All Images:"
+                all_images.each { image ->
+                    echo image
+                }
+
+                // Xóa các hình ảnh cũ trừ hình ảnh mới
+                all_images.each { image ->
+                    if (image != "keycloak-springboot-microservice:${env.BUILD_NUMBER}") {
+                        // In log để kiểm tra việc xóa hình ảnh
+                        echo "Deleting image: $image"
+                        sh "docker rmi $image || true"
+                    }
+                }
              sh "docker run --name keycloak-springboot-microservice -d -p 9797:8080 --mount type=bind,source=/Files-Upload,target=/Files-Upload keycloak-springboot-microservice:${env.BUILD_NUMBER}"
          }
     }catch(e){
