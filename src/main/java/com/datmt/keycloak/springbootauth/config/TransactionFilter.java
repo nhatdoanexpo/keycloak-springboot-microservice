@@ -54,7 +54,7 @@ public class TransactionFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+	public void doFilter( ServletRequest request,  ServletResponse response,  FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
@@ -82,15 +82,8 @@ public class TransactionFilter implements Filter {
 			LOG.info("header :{} ", headerName);
 			LOG.info("value :{} ", headerValue);
 		}
-
 		LOG.info("Starting Transaction for req :{}", req.getRequestURI());
-		if(req.getRequestURI().equals("/blogger-api-gateway/swagger-ui")){
-			res.setStatus(HttpStatus.BAD_REQUEST.value());
-			res.getWriter().write(" only support call blogger-api-gateway/swagger-ui/index.html");
-			return;
-		}
-
-			chain.doFilter(request, response);
+		 chain.doFilter(request, response);
 		res.setHeader("Access-Control-Allow-Origin", "*");
 		LOG.info("Committing Transaction for req :{}", req.getRequestURI());
 
