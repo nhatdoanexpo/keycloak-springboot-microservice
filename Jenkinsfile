@@ -33,13 +33,6 @@ node {
              """
              sh "docker run --name keycloak-springboot-microservice -d -p 9797:8080 --mount type=bind,source=/Files-Upload,target=/Files-Upload keycloak-springboot-microservice:${env.BUILD_NUMBER}"
          }
-         Trong đoạn mã này, chúng tôi sử dụng một vòng lặp để xóa tất cả các hình ảnh có tên "keycloak-springboot-microservice" trừ hình ảnh mới được xây dựng trong stage('Deploy docker').
-
-
-
-
-
-
     }catch(e){
 //         currentBuild.result = "FAILED"
         throw e
