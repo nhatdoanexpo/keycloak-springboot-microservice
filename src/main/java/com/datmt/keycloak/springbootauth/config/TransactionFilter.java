@@ -84,7 +84,6 @@ public class TransactionFilter implements Filter {
 		}
 		LOG.info("Starting Transaction for req :{}", req.getRequestURI());
 		 chain.doFilter(request, response);
-		res.setHeader("Access-Control-Allow-Origin", "*");
 		LOG.info("Committing Transaction for req :{}", req.getRequestURI());
 
 	}
